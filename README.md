@@ -24,8 +24,8 @@ Este proyecto es un sistema que permite la creación automatizada de contratos d
 
 1. **Clonar el repositorio**:
    ```bash
-   git clone <url_del_repositorio>
-   cd nombre_del_proyecto
+   git clone https://github.com/infestedwolf129/proyecto-contratos.git
+   cd proyecto-contratos
 
 ## Autores
 
