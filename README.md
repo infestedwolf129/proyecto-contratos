@@ -31,3 +31,8 @@ Este proyecto es un sistema que permite la creación automatizada de contratos d
 
 - **Manuel Silva** (id github Manuuuxd)
 - **Thomas Rodriguez** (id github infestedwolf129)
+
+## Instrucciones
+
+- **Backend**: Para iniciar el backend es necesario irse a la carpeta de Backend y ejecutar npm run dev
+- **Frontend**: Para iniciar el frontned es necesario irse a la carpeta de Frontend y ejecutar npm start
