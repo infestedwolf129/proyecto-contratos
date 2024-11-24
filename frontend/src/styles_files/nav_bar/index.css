@@ -13,8 +13,9 @@
 }
 
 .custom-nav-link:hover {
-    background-color: #ddd; /* Color de fondo al pasar el mouse */
+    background-color: #0254cf; /* Color de fondo al pasar el mouse */
     color: #000; /* Color del texto al pasar el mouse */
+    border-radius: 5px; /* Bordes redondeados */
 }
 
 .custom-nav-link.active {

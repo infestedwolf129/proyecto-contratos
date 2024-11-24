@@ -1,4 +1,3 @@
 @import './App.css';
-@import './gen_contratos/index.css';
-@import './home/index.css';
 @import './nav_bar/index.css';
+@import './footer/index.css';

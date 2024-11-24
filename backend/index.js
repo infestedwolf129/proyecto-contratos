@@ -20,7 +20,15 @@ const prohibicionesDisponibles = [
     'Almacenar materiales peligrosos o inflamables',
     'Organizar eventos con más de X personas sin permiso',
     'Dejar basura acumulada o residuos peligrosos en el inmueble',
-    'Instalar antenas, equipos grandes o dispositivos en el exterior sin permiso'
+    'Instalar antenas, equipos grandes o dispositivos en el exterior sin permiso',
+    'Realizar actividades molestas, insalubres, nocivas o peligrosas',
+    'Mantener estufas a kerosene sin medidas de seguridad adecuadas',
+    'Causar daños al inmueble o sus instalaciones',
+    'Ceder el uso del inmueble a terceros sin consentimiento',
+    'Instalar sistemas de calefacción sin aprobación previa',
+    'Usar el inmueble para actividades ilegales o inmorales',
+    'Modificar el sistema eléctrico o de gas sin autorización',
+    'Hacer modificaciones estéticas al inmueble sin autorización'
 ];
 
 // Ruta para enviar las prohibiciones al frontend

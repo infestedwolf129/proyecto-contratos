@@ -1,5 +1,86 @@
-.home-main {
+.home {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Hero Section */
+.home__hero {
+    background-color: #004285;
+    background-size: cover;
+    background-position: center;
+    color: rgb(255, 255, 255);
+    text-align: center;
+    padding: 80px 20px;
+}
+
+.home__hero h2 {
+    font-size: 3em;
+    margin: 0;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.home__hero p {
+    font-size: 1.2em;
+    max-width: 700px;
+    margin: 20px auto;
+}
+
+.home__cta-button {
+    background-color: green;
+    color: white;
+    padding: 12px 30px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+/* Main Content */
+.home__main-content {
+    display: flex;
+    justify-content: space-evenly;
+    gap: 40px;
+    padding: 40px 20px;
+    text-align: center;
+    background-color: #f7f7f7;
+}
+
+.home__card {
     background-color: #ffffff;
-    justify-content: center;
-    margin-top: 1fr; /* Ajusta el valor según sea necesario */
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    width: 280px;
+    text-align: center;
+}
+
+.home__card h3 {
+    font-size: 1.5em;
+    margin-top: 0;
+    font-weight: 600;
+}
+
+.home__card p {
+    font-size: 1.1em;
+    color: #555;
+    line-height: 1.6;
+}
+
+/* Responsiveness */
+@media (max-width: 768px) {
+    .home__hero h2 {
+        font-size: 2.5em;
+    }
+
+    .home__main-content {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .home__card {
+        width: 90%;
+        margin-bottom: 20px;
+    }
 }

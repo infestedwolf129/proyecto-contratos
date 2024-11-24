@@ -27,12 +27,3 @@
   margin-top: 56px; /* Ajusta este valor según la altura del NavBar */
   padding: 1rem;
 }
-
-.app_footer {
-  background-color: #0c7ff1; /* Fondo sutil */
-  color: rgb(223, 223, 223); /* Texto blanco */
-  padding: 1rem;
-  text-align: center;
-  bottom: 0;
-  z-index: 1000; /* Para estar encima de otros elementos */
-}
