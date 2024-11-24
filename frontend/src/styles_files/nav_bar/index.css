@@ -1,0 +1,38 @@
+.navbar {
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* Agrega una sombra sutil */
+    z-index: 1000; /* Mantén el NavBar encima de otros elementos */
+}
+
+.navbar-brand img {
+    margin-right: 10px; /* Espacio entre el logotipo y el texto */
+}
+
+.custom-nav-link {
+    color: #000; /* Color del texto de los enlaces */
+    transition: background-color 0.3s, color 0.3s; /* Transición suave para el cambio de color */
+}
+
+.custom-nav-link:hover {
+    background-color: #ddd; /* Color de fondo al pasar el mouse */
+    color: #000; /* Color del texto al pasar el mouse */
+}
+
+.custom-nav-link.active {
+    background-color: #023a8f; /* Fondo oscuro para el enlace activo */
+    color: #fff; /* Texto blanco */
+    font-weight: bold; /* Opcional: enfatiza el enlace activo */
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.5); /* Sombra sutil */
+    border-radius: 5px;
+}
+
+/* Agrega un margen a la izquierda para los enlaces */
+.custom-nav-link:not(:first-child) {
+    margin-left: 10px;
+}
+/* Agrega un margen a la derecha para los enlaces */
+
+.custom-nav-link:not(:last-child) {
+    margin-right: 10px;
+}
+
+

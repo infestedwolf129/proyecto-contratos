@@ -1,49 +1,45 @@
+import React from 'react';
+import { useLocation, Link } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
-import NavDropdown from 'react-bootstrap/NavDropdown';
 import logo from '../assets/logo.png';
+import '../styles_files/index.css';
 
 function NavBar() {
+  const location = useLocation(); // Obtiene la ruta actual
+
   return (
     <>
-      <Navbar  bg="primary" data-bs-theme="dark" collapseOnSelect expand="lg">
-        <Container>
-            <Navbar.Brand href="#home">
+      <Navbar bg="primary" variant="dark" expand="lg" fixed="top" className="justify-content-end navbar">
+        <Container fluid>
+          <Navbar.Brand as={Link} to="/"> {/* Usa 'as={Link}' para el logo también */}
             <img
-                alt=""
-                src={logo}
-                width="30"
-                height="30"
-                className="d-inline-block align-top"
+              alt=""
+              src={logo}
+              width="30"
+              height="30"
+              className="d-inline-block align-top"
             />{' '}
-            Proyecto Contratos
-            </Navbar.Brand>
-            <Navbar.Toggle  aria-controls="responsive-navbar-nav" />
-            <Navbar.Collapse id="responsive-navbar-nav">
-              <Nav className="me-auto"></Nav>
-              <Nav>
-                  <Nav.Link href="#home">Inicio</Nav.Link>
-                  <Nav.Link href="#link">Generador</Nav.Link>
-                  <NavDropdown title="Más" id="collapsible-nav-dropdown">
-                  <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-                  <NavDropdown.Item href="#action/3.2">
-                      Another action
-                  </NavDropdown.Item>
-                  <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
-                  <NavDropdown.Divider />
-                  <NavDropdown.Item href="#action/3.4">
-                      Separated link
-                  </NavDropdown.Item>
-                  </NavDropdown>
-              </Nav>
-              <Nav>
-                  <Nav.Link href="#deets">Iniciar Sesión</Nav.Link>
-                  <Nav.Link eventKey={2} href="#memes">
-                      Registrarse
-                  </Nav.Link>
-              </Nav>
-            </Navbar.Collapse>
+            Contrato Fácil
+          </Navbar.Brand>
+          <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+          <Navbar.Collapse id="responsive-navbar-nav" className="justify-content-end">
+            <Nav className='ml-auto'>
+              <Nav.Link as={Link} to="/" className={`custom-nav-link ${location.pathname === '/' ? 'active' : ''}`}>
+                Inicio
+              </Nav.Link>
+              <Nav.Link as={Link} to="/generador-contratos" className={`custom-nav-link ${location.pathname === '/generador-contratos' ? 'active' : ''}`}>
+                Generador
+              </Nav.Link>
+              <Nav.Link as={Link} to="/iniciar-sesion" className={`custom-nav-link ${location.pathname === '/iniciar-sesion' ? 'active' : ''}`}>
+                Iniciar Sesión
+              </Nav.Link>
+              <Nav.Link as={Link} to="/registrarse" className={`custom-nav-link ${location.pathname === '/registrarse' ? 'active' : ''}`}>
+                Registrarse
+              </Nav.Link>
+            </Nav>
+          </Navbar.Collapse>
         </Container>
       </Navbar>
     </>
