@@ -18,7 +18,7 @@ Este proyecto es un sistema que permite la creación automatizada de contratos d
 
 - **Frontend**: Node.js y React
 - **Backend**: Node.js, MariaDB
-- **Base de Datos**: Configurada para almacenar contratos generados y sus opciones.
+- **Base de Dagtos**: Configurada para almacenar contratos generados y sus opciones.
 
 ## Instalación
 

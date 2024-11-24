@@ -1,164 +1,150 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-function GeneradorContratos(){
-
+function GeneradorContratos() {
     // Estados para los detalles del contrato
-    const [cliente, setCliente] = useState('');
-    const [objeto, setObjeto] = useState(''); // Objeto del contrato (Casa o Departamento)
+    const [arrendatario, setArrendatario] = useState('');
+    const [direccion, setDireccion] = useState('');
     const [renta, setRenta] = useState('');
     const [duracion, setDuracion] = useState('');
-    const [garantia, setGarantia] = useState('');
+    const [garantia, setGarantia] = useState('');  // Nuevo campo para la garantía
     const [mascotasPermitidas, setMascotasPermitidas] = useState(false);
-    const [prohibiciones, setProhibiciones] = useState([]);
-    
-    // Lista de prohibiciones predefinidas
-    const prohibicionesOptions = [
-        'Subarrendar',
-        'Hacer modificaciones sin permiso',
-        'Realizar ruidos molestos',
-        'Tener mascotas sin autorización'
-    ];
+    const [prohibicionesSeleccionadas, setProhibicionesSeleccionadas] = useState([]);
+    const [prohibicionesDisponibles, setProhibicionesDisponibles] = useState([]);
+    const [cliente, setCliente] = useState('');
+    const [calle, setCalle] = useState('');
+    const [numeroCalle, setNumeroCalle] = useState('');
+    const [ciudad, setCiudad] = useState('');
+    const [rolAvaluos, setRolAvaluos] = useState('');
+    const [comuna, setComuna] = useState('');
+    const [numeroPersonas, setNumeroPersonas] = useState('');
+    const [pdfUrl, setPdfUrl] = useState(null);
 
-    // Estado para mostrar el contrato generado
-    const [contratoGenerado, setContratoGenerado] = useState(null);
+    // Personalización del PDF
+    const [fontSize, setFontSize] = useState(12);
+    const [textColor, setTextColor] = useState('#000000');
+    const [fontStyle, setFontStyle] = useState('Times-Roman');
+
+    // Obtener las prohibiciones desde el backend
+    useEffect(() => {
+        axios.get('http://localhost:3001/prohibiciones')
+            .then((response) => setProhibicionesDisponibles(response.data))
+            .catch((error) => console.error('Error al cargar las prohibiciones:', error));
+    }, []);
 
     const handleProhibicionesChange = (event) => {
         const { value, checked } = event.target;
-        setProhibiciones(prev => 
-            checked ? [...prev, value] : prev.filter(item => item !== value)
+        setProhibicionesSeleccionadas((prev) =>
+            checked ? [...prev, value] : prev.filter((item) => item !== value)
         );
     };
 
     const handleSubmit = () => {
-        // Crear el contrato con los valores del formulario
         const contrato = {
             cliente,
-            objeto,
+            arrendatario,
+            direccion,
             renta: parseFloat(renta),
             duracion: parseInt(duracion),
             garantia: parseFloat(garantia),
             mascotasPermitidas,
-            prohibiciones
+            prohibiciones: prohibicionesSeleccionadas,
+            calle,
+            numeroCalle,
+            ciudad,
+            rolAvaluos,
+            comuna,
+            numeroPersonas,
+            personalizacion: { fontSize, textColor, fontStyle }
         };
 
-        // Establecer el contrato generado para mostrarlo en pantalla
-        setContratoGenerado(contrato);
-
-        // Enviar el contrato al backend
-        axios.post('http://localhost:3001/guardar-contrato', contrato)
-            .then((response) => {
-                console.log('Contrato guardado en el backend:', response.data);
-            })
-            .catch((error) => {
-                console.error('Error al guardar el contrato:', error);
-            });
+        axios.post('http://localhost:3001/generar-pdf', contrato)
+            .then((response) => setPdfUrl(`http://localhost:3001${response.data.pdfPath}`))
+            .catch((error) => console.error('Error al generar el PDF:', error));
     };
 
-    return(
-            <div className="contratos-container">
-                <h1>Crear Contrato de Arrendamiento</h1>
-                <div className='details-container'>
-                    <h2>Detalles del Contrato</h2>
-                    <form onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
-                    <div className='details-label'>
-                        <label>Cliente:</label>
-                        <input
-                            type="text"
-                            value={cliente}
-                            onChange={(e) => setCliente(e.target.value)}
-                            placeholder="Nombre del cliente"
-                            required
-                        />
+    return (
+        <div className="contratos-container">
+            <h1>Crear Contrato de Arrendamiento</h1>
+            <form onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
+                <div>
+                    <label>Arrendador:</label>
+                    <input type="text" value={cliente} onChange={(e) => setCliente(e.target.value)} required />
+                </div>
+                <div>
+                    <label>Arrendatario:</label>
+                    <input type="text" value={arrendatario} onChange={(e) => setArrendatario(e.target.value)} required />
+                </div>
+                <div>
+                    <label>Dirección del Arrendatario:</label>
+                    <input type="text" value={direccion} onChange={(e) => setDireccion(e.target.value)} required />
+                </div>
+                <div>
+                    <label>Renta:</label>
+                    <input type="number" value={renta} onChange={(e) => setRenta(e.target.value)} required />
+                </div>
+                <div>
+                    <label>Duración (meses):</label>
+                    <input type="number" value={duracion} onChange={(e) => setDuracion(e.target.value)} required />
+                </div>
+                <div>
+                    <label>Garantía:</label> {/* Nuevo campo */}
+                    <input type="number" value={garantia} onChange={(e) => setGarantia(e.target.value)} required />
+                </div>
+                <div>
+                    <label>
+                        Permitir Mascotas:
+                        <input type="checkbox" checked={mascotasPermitidas} onChange={(e) => setMascotasPermitidas(e.target.checked)} />
+                    </label>
+                </div>
+                <div>
+                    <label>Prohibiciones:</label>
+                    {prohibicionesDisponibles.map((prohibicion, index) => (
+                        <div key={index}>
+                            <label>
+                                <input
+                                    type="checkbox"
+                                    value={prohibicion}
+                                    checked={prohibicionesSeleccionadas.includes(prohibicion)}
+                                    onChange={handleProhibicionesChange}
+                                />
+                                {prohibicion}
+                            </label>
+                        </div>
+                    ))}
+                </div>
+                <div>
+                    <h3>Personalización del PDF</h3>
+                    <div>
+                        <label>Tamaño de letra:</label>
+                        <input type="number" value={fontSize} onChange={(e) => setFontSize(parseInt(e.target.value))} min={8} max={24} />
                     </div>
                     <div>
-                        <label>Objeto del Contrato:</label>
-                        <select
-                            value={objeto}
-                            onChange={(e) => setObjeto(e.target.value)}
-                            required
-                        >
-                            <option value="">Seleccione una opción</option>
-                            <option value="Casa">Casa</option>
-                            <option value="Departamento">Departamento</option>
+                        <label>Color del texto:</label>
+                        <input type="color" value={textColor} onChange={(e) => setTextColor(e.target.value)} />
+                    </div>
+                    <div>
+                        <label>Estilo de fuente:</label>
+                        <select value={fontStyle} onChange={(e) => setFontStyle(e.target.value)}>
+                            <option value="Times-Roman">Times-Roman</option>
+                            <option value="Helvetica">Helvetica</option>
+                            <option value="Courier">Courier</option>
                         </select>
                     </div>
-                    <div>
-                        <label>Renta:</label>
-                        <input
-                            type="number"
-                            value={renta}
-                            onChange={(e) => setRenta(e.target.value)}
-                            placeholder="Monto de la renta"
-                            required
-                        />
-                    </div>
-                    <div>
-                        <label>Duración (meses):</label>
-                        <input
-                            type="number"
-                            value={duracion}
-                            onChange={(e) => setDuracion(e.target.value)}
-                            placeholder="Duración del contrato"
-                            required
-                        />
-                    </div>
-                    <div>
-                        <label>Garantía:</label>
-                        <input
-                            type="number"
-                            value={garantia}
-                            onChange={(e) => setGarantia(e.target.value)}
-                            placeholder="Monto de la garantía"
-                            required
-                        />
-                    </div>
-                    <div>
-                        <label>
-                            Permitir Mascotas:
-                            <input
-                                type="checkbox"
-                                checked={mascotasPermitidas}
-                                onChange={(e) => setMascotasPermitidas(e.target.checked)}
-                            />
-                        </label>
-                    </div>
-                    <div>
-                        <label>Prohibiciones (selecciona las que apliquen):</label>
-                        <div>
-                            {prohibicionesOptions.map((prohibicion, index) => (
-                                <div key={index}>
-                                    <label>
-                                        <input
-                                            type="checkbox"
-                                            value={prohibicion}
-                                            checked={prohibiciones.includes(prohibicion)}
-                                            onChange={handleProhibicionesChange}
-                                        />
-                                        {prohibicion}
-                                    </label>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                    <button type="submit">Generar Contrato</button>
-                </form>
-            </div>
-
-            {contratoGenerado && (
+                </div>
+                <button type="submit">Generar Contrato</button>
+            </form>
+            {pdfUrl && (
                 <div>
-                    <h2>Contrato Generado</h2>
-                    <p><strong>Cliente:</strong> {contratoGenerado.cliente}</p>
-                    <p><strong>Objeto:</strong> {contratoGenerado.objeto}</p>
-                    <p><strong>Renta:</strong> ${contratoGenerado.renta}</p>
-                    <p><strong>Duración:</strong> {contratoGenerado.duracion} meses</p>
-                    <p><strong>Garantía:</strong> ${contratoGenerado.garantia}</p>
-                    <p><strong>Mascotas Permitidas:</strong> {contratoGenerado.mascotasPermitidas ? 'Sí' : 'No'}</p>
-                    <p><strong>Prohibiciones:</strong> {contratoGenerado.prohibiciones.join(', ')}</p>
+                    <h2>PDF Generado</h2>
+                    <a href={pdfUrl} target="_blank" rel="noopener noreferrer">Descargar PDF</a>
                 </div>
             )}
         </div>
-    )
+    );
 }
 
 export default GeneradorContratos;
+
+
+
