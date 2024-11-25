@@ -1,13 +1,19 @@
 import React from 'react';
 import { useLocation, Link } from 'react-router-dom';
+import { LoginButton } from "./login.js";
+import { LogoutButton } from "./logout.js";
+import { useAuth0 } from "@auth0/auth0-react";
 import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import logo from '../assets/logo.png';
 import '../styles_files/index.css';
 
+
+
 function NavBar() {
   const location = useLocation(); // Obtiene la ruta actual
+  const { isAuthenticated } = useAuth0();
 
   return (
     <>
@@ -32,12 +38,16 @@ function NavBar() {
               <Nav.Link as={Link} to="/generador-contratos" className={`custom-nav-link ${location.pathname === '/generador-contratos' ? 'active' : ''}`}>
                 Generador
               </Nav.Link>
-              <Nav.Link as={Link} to="/iniciar-sesion" className={`custom-nav-link ${location.pathname === '/iniciar-sesion' ? 'active' : ''}`}>
-                Iniciar Sesión
-              </Nav.Link>
-              <Nav.Link as={Link} to="/registrarse" className={`custom-nav-link ${location.pathname === '/registrarse' ? 'active' : ''}`}>
-                Registrarse
-              </Nav.Link>
+              {isAuthenticated ? (
+                <>
+                  <Nav.Link as={Link} to="/perfil" className={`custom-nav-link ${location.pathname === '/perfil' ? 'active' : ''}`}>
+                    Perfil
+                  </Nav.Link>
+                  <LogoutButton />
+                </>
+              ) : (
+                <LoginButton />
+              )}
             </Nav>
           </Navbar.Collapse>
         </Container>

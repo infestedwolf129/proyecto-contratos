@@ -5,6 +5,7 @@ import GeneradorContratos from './components/Generador_Contratos';
 import NavBar from './components/NavBar';
 import HomePage from './pages/home.js';
 import Footer from './components/Footer';
+import ProfilePage from './pages/profilePage.js';
 
 import './styles_files/index.css';
 
@@ -22,6 +23,7 @@ function App() {
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/generador-contratos" element={<GeneradorContratos />} />
+              <Route path="/perfil" element={<ProfilePage />} />
             </Routes>
           </main>
           <Footer />
