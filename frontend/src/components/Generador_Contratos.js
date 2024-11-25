@@ -18,7 +18,7 @@ function GeneradorContratos() {
     const [calle, setCalle] = useState('');
     const [numeroCalle, setNumeroCalle] = useState('');
     const [ciudad, setCiudad] = useState('');
-    const [rolAvaluos, setRolAvaluos] = useState('');
+    const [rolAvaluos, setRolAvaluos] = useState('');  // Ahora es un string
     const [comuna, setComuna] = useState('');
     const [numeroPersonas, setNumeroPersonas] = useState('');
     const [pdfUrl, setPdfUrl] = useState(null);
@@ -55,7 +55,7 @@ function GeneradorContratos() {
             calle,
             numeroCalle,
             ciudad,
-            rolAvaluos,
+            rolAvaluos,  // Se mantiene como string
             comuna,
             numeroPersonas,
             personalizacion: { fontSize, textColor, fontStyle }
@@ -73,7 +73,7 @@ function GeneradorContratos() {
                 <div className="card shadow p-4">
                     <form onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
                         <h3>Datos del contrato:</h3>
-                        <br/>
+                        <br />
                         <div className="mb-3">
                             <label className="form-label">Arrendador</label>
                             <input
@@ -154,10 +154,10 @@ function GeneradorContratos() {
                         <div className="mb-3">
                             <label className="form-label">Rol de Avalúos</label>
                             <input
-                                type="number"
+                                type="text" // Cambiado a texto
                                 className="form-control"
                                 value={rolAvaluos}
-                                onChange={(e) => setRolAvaluos(e.target.value)}
+                                onChange={(e) => setRolAvaluos(e.target.value)}  // Sigue siendo tratado como string
                                 required
                                 placeholder='12.345.678-9'
                             />
@@ -238,23 +238,23 @@ function GeneradorContratos() {
                                 </div>
                             ))}
                         </div>
-                        <h3>Personalización del PDF:</h3><br/>
+                        <h3>Personalización del PDF:</h3><br />
                         <div className="mb-3">
                             <label className="form-label">Tamaño de letra:</label>
-                            <input 
-                                type="number" 
-                                value={fontSize} 
-                                onChange={(e) => setFontSize(parseInt(e.target.value))} 
-                                min={8} 
-                                max={24} 
+                            <input
+                                type="number"
+                                value={fontSize}
+                                onChange={(e) => setFontSize(parseInt(e.target.value))}
+                                min={8}
+                                max={24}
                                 className="form-control"
                             />
                         </div>
                         <div className='mb-3'>
                             <label className='form-label'>Color del texto:</label>
-                            <input 
-                                type="color" 
-                                value={textColor} 
+                            <input
+                                type="color"
+                                value={textColor}
                                 onChange={(e) => setTextColor(e.target.value)}
                                 className='form-control'
                             />
@@ -278,8 +278,8 @@ function GeneradorContratos() {
                 </div>
             </div>
         </div>
-        
     );
 }
 
 export default GeneradorContratos;
+

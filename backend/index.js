@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const PDFDocument = require('pdfkit');
 const fs = require('fs');
 const path = require('path');
+const db = require('./db'); // Asegúrate de importar la conexión a la base de datos
 
 const app = express();
 const PORT = 3001;
@@ -100,8 +101,42 @@ Arrendatario: ______________________
     doc.end();
 
     writeStream.on('finish', () => {
-        // Enviar la ruta del archivo generado al frontend
-        res.status(200).send({ message: 'PDF generado con éxito', pdfPath: `/pdfs/${fileName}` });
+        // Insertar el contrato en la base de datos
+        const sql = `
+            INSERT INTO contratos (
+                cliente, arrendatario, direccion, renta, duracion, garantia, 
+                mascotasPermitidas, prohibiciones, calle, numeroCalle, ciudad, 
+                rolAvaluos, comuna, numeroPersonas, pdfPath
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `;
+        const params = [
+            contrato.cliente,
+            contrato.arrendatario,
+            contrato.direccion,
+            contrato.renta,
+            contrato.duracion,
+            contrato.garantia,
+            contrato.mascotasPermitidas ? 1 : 0,
+            contrato.prohibiciones.join(', '),
+            contrato.calle,
+            contrato.numeroCalle,
+            contrato.ciudad,
+            contrato.rolAvaluos,  // Cambiado a TEXT
+            contrato.comuna,
+            contrato.numeroPersonas,
+            `/pdfs/${fileName}`
+        ];
+
+        db.run(sql, params, (err) => {
+            if (err) {
+                console.error('Error al insertar contrato:', err.message);
+                res.status(500).send('Error al guardar el contrato en la base de datos.');
+            } else {
+                // Enviar la ruta del archivo generado al frontend
+                res.status(200).send({ message: 'PDF generado y contrato guardado con éxito', pdfPath: `/pdfs/${fileName}` });
+            }
+        });
     });
 
     writeStream.on('error', (err) => {
@@ -110,10 +145,95 @@ Arrendatario: ______________________
     });
 });
 
+
+// Ruta para obtener todos los contratos
+app.get('/miscontratos', (req, res) => {
+    db.all('SELECT * FROM contratos', (err, rows) => {
+        if (err) {
+            console.error('Error al obtener contratos:', err.message);
+            res.status(500).send('Error al obtener contratos.');
+        } else {
+            // Convertir la cadena de prohibiciones a un array
+            rows.forEach((row) => {
+                row.prohibiciones = row.prohibiciones.split(', '); // Convertir a un array de prohibiciones
+            });
+            res.status(200).send(rows);
+        }
+    });
+});
+
+app.put('/actualizar-contrato/:id', (req, res) => {
+    const contratoId = req.params.id;
+    const { cliente, arrendatario, direccion, renta, duracion, garantia, mascotasPermitidas, prohibiciones, calle, numeroCalle, ciudad, rolAvaluos, comuna, numeroPersonas } = req.body;
+
+    // Actualizar el contrato en la base de datos
+    const sql = `UPDATE contratos SET
+        cliente = ?,
+        arrendatario = ?,
+        direccion = ?,
+        renta = ?,
+        duracion = ?,
+        garantia = ?,
+        mascotasPermitidas = ?,
+        prohibiciones = ?,
+        calle = ?,
+        numeroCalle = ?,
+        ciudad = ?,
+        rolAvaluos = ?,
+        comuna = ?,
+        numeroPersonas = ?
+        WHERE id = ?`;
+
+    const params = [
+        cliente, arrendatario, direccion, renta, duracion, garantia, mascotasPermitidas, prohibiciones.join(', '), 
+        calle, numeroCalle, ciudad, rolAvaluos, comuna, numeroPersonas, contratoId
+    ];
+
+    db.run(sql, params, function(err) {
+        if (err) {
+            console.error('Error al actualizar el contrato:', err.message);
+            return res.status(500).send('Error al actualizar el contrato');
+        }
+
+        res.status(200).send({ message: 'Contrato actualizado con éxito' });
+    });
+});
+
+app.delete('/eliminar-contrato/:id', (req, res) => {
+    const contratoId = req.params.id;
+
+    const sql = `DELETE FROM contratos WHERE id = ?`;
+
+    db.run(sql, [contratoId], function(err) {
+        if (err) {
+            console.error('Error al eliminar el contrato:', err.message);
+            return res.status(500).send('Error al eliminar el contrato');
+        }
+
+        res.status(200).send({ message: 'Contrato eliminado con éxito' });
+    });
+});
+
+app.get('/contrato/:id', (req, res) => {
+    const { id } = req.params;
+    db.get('SELECT * FROM contratos WHERE id = ?', [id], (err, row) => {
+        if (err) {
+            console.error('Error al obtener contrato:', err.message);
+            res.status(500).send('Error al obtener contrato.');
+        } else if (!row) {
+            res.status(404).send('Contrato no encontrado.');
+        } else {
+            res.status(200).send(row);  // Devuelve los datos del contrato
+        }
+    });
+});
+
+
 // Inicia el servidor
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });
+
 
 
 

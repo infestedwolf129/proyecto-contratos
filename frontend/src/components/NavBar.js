@@ -9,8 +9,6 @@ import Nav from 'react-bootstrap/Nav';
 import logo from '../assets/logo.png';
 import '../styles_files/index.css';
 
-
-
 function NavBar() {
   const location = useLocation(); // Obtiene la ruta actual
   const { isAuthenticated } = useAuth0();
@@ -38,6 +36,12 @@ function NavBar() {
               <Nav.Link as={Link} to="/generador-contratos" className={`custom-nav-link ${location.pathname === '/generador-contratos' ? 'active' : ''}`}>
                 Generador
               </Nav.Link>
+              
+              {/* Agregar el enlace a Mis Contratos */}
+              <Nav.Link as={Link} to="/miscontratos" className={`custom-nav-link ${location.pathname === '/miscontratos' ? 'active' : ''}`}>
+                Mis Contratos
+              </Nav.Link>
+
               {isAuthenticated ? (
                 <>
                   <Nav.Link as={Link} to="/perfil" className={`custom-nav-link ${location.pathname === '/perfil' ? 'active' : ''}`}>
@@ -57,3 +61,4 @@ function NavBar() {
 }
 
 export default NavBar;
+
