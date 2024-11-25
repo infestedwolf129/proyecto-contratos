@@ -37,7 +37,8 @@ db.run(`DROP TABLE IF EXISTS contratos`, (err) => {
             rolAvaluos TEXT NOT NULL,  
             comuna TEXT NOT NULL,
             numeroPersonas INTEGER NOT NULL,
-            pdfPath TEXT NOT NULL
+            pdfPath TEXT NOT NULL,
+            usuario TEXT
         );
     `, (err) => {
         if (err) {

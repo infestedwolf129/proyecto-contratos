@@ -1,3 +1,5 @@
+
+
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
@@ -60,6 +62,7 @@ app.post('/generar-pdf', (req, res) => {
 
     // Crear contrato base con los datos dinámicos
     let textoContrato = `
+**CONTRATO DE ARRENDAMIENTO DE VIVIENDA**
 En ${new Date().toLocaleDateString()} a ____ de _____ del año ______ comparecen: 
 
 Por una parte, como arrendador/a don/ña ${contrato.cliente}, domiciliado/a en ${contrato.direccion} número _______ comuna de _________, cédula de identidad número ________.
@@ -106,9 +109,9 @@ Arrendatario: ______________________
             INSERT INTO contratos (
                 cliente, arrendatario, direccion, renta, duracion, garantia, 
                 mascotasPermitidas, prohibiciones, calle, numeroCalle, ciudad, 
-                rolAvaluos, comuna, numeroPersonas, pdfPath
+                rolAvaluos, comuna, numeroPersonas, pdfPath, usuario
             )
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         `;
         const params = [
             contrato.cliente,
@@ -125,7 +128,8 @@ Arrendatario: ______________________
             contrato.rolAvaluos,  // Cambiado a TEXT
             contrato.comuna,
             contrato.numeroPersonas,
-            `/pdfs/${fileName}`
+            `/pdfs/${fileName}`,
+            contrato.usuario
         ];
 
         db.run(sql, params, (err) => {

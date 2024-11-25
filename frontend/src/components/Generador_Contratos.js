@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-
+import { useAuth0 } from '@auth0/auth0-react';
 import '../styles_files/gen_contratos/index.css';
 
 function GeneradorContratos() {
@@ -22,6 +22,17 @@ function GeneradorContratos() {
     const [comuna, setComuna] = useState('');
     const [numeroPersonas, setNumeroPersonas] = useState('');
     const [pdfUrl, setPdfUrl] = useState(null);
+    const [usuario, setUsuario] = useState(null);
+
+    const { user, isAuthenticated } = useAuth0();
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            setUsuario(user.email);
+        } else {
+            setUsuario('');
+        }
+    }, [isAuthenticated, user]);
 
     // Personalización del PDF
     const [fontSize, setFontSize] = useState(12);
@@ -58,7 +69,8 @@ function GeneradorContratos() {
             rolAvaluos,  // Se mantiene como string
             comuna,
             numeroPersonas,
-            personalizacion: { fontSize, textColor, fontStyle }
+            personalizacion: { fontSize, textColor, fontStyle },
+            usuario
         };
 
         axios.post('http://localhost:3001/generar-pdf', contrato)
